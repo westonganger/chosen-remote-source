@@ -1,0 +1,38 @@
+{
+  "name": "chosen-ajax-options",
+  "version": "0.9.0",
+  "description": "Provides remote data source support for chosen-js selects",
+  "main": "dist/chosen-ajax-options.js",
+  "scripts": {
+    "build": "terser --compress --mangle -- src/chosen-ajax-options.js > dist/chosen-ajax-options.js",
+    "release": "yarn run build && npm publish"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:westonganger/chosen-ajax-options.git"
+  },
+  "keywords": [
+    "chosen",
+    "select",
+    "remote-source",
+    "ajax",
+    "jquery",
+    "javascript",
+    "js"
+  ],
+  "author": "Weston Ganger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/westonganger/chosen-ajax-options/issues"
+  },
+  "homepage": "https://github.com/westonganger/chosen-ajax-options",
+  "dependencies": {
+    "chosen-js": ">=1.0"
+  },
+  "devDependencies": {
+    "terser": "*"
+  }
+}
