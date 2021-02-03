@@ -24,7 +24,7 @@ npm install chosen-ajax-options
 
 Now upon entering text the remote URL will be used to create an AJAX query to update the select options.
 
-It send the following parameters:
+The ajax request will send the following parameters:
 
 - `q` - The search text
 - `selected` - The selected value(s)
@@ -45,6 +45,12 @@ The plugins expects that your URL will return an array of objects with the `valu
   
   /* ... */
 ]
+```
+
+The default delay is 250ms, you can change this by setting the `delay` option:
+
+```javascript
+ChosenAjaxOptions.delay = 250;
 ```
 
 # Credits

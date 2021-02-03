@@ -24,20 +24,25 @@ chosen_prototype.show_search_field_default = function() {
   }
 };
 
+var default_delay = 250;
+
+window.ChosenAjaxOptions.delay = default_delay;
+
 // ADD DEBOUNCE METHOD
-// https://davidwalsh.name/javascript-debounce-function
-var debounce = function(func, wait, immediate) {
+var debounce = function(func){
   var timeout;
+
   return function() {
     var context = this, args = arguments;
+
     var later = function() {
       timeout = null;
-      if (!immediate) func.apply(context, args);
+      func.apply(context, args);
     };
-    var callNow = immediate && !timeout;
+
     clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
+
+    timeout = setTimeout(later, (ChosenAjaxOptions.delay || default_delay));
   };
 };
 
@@ -77,7 +82,7 @@ var debouncedCallback = debounce(function(){
 
     select.html(opts).val(selected).trigger('chosen:updated');
   });
-}, 250);
+});
 
 // BIND INPUT EVENT
 $(document).on('input', '.chosen-container input.chosen-search-input', debouncedCallback);
