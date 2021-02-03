@@ -1,7 +1,0 @@
-/*
- * chosen-ajax-options
- * @version v0.9.0
- * @link http://github.com/westonganger/chosen-ajax-options
- * @license MIT
- */
-var el=$("<select></select>");el.chosen();var chosen_prototype=Object.getPrototypeOf(el.data("chosen"));chosen_prototype.show_search_field_default=function(){return this.is_multiple&&this.choices_count()<1&&!this.active_field?(this.search_field.val(this.default_text),this.search_field.addClass("default")):(this.default_text===this.search_field.val()&&this.search_field.val(""),this.search_field.removeClass("default"))};var debounce=function(e,t,l){var a;return function(){var o=this,s=arguments,n=function(){a=null,l||e.apply(o,s)},c=l&&!a;clearTimeout(a),a=setTimeout(n,t),c&&e.apply(o,s)}},debouncedCallback=debounce((function(){var e=$(this),t=e.val(),l=e.closest(".chosen-container").prev("select"),a=l.val();if(l[0].hasAttribute("multiple"))for(var o=0;o<a.length;o++)selected_opts+=l.find("option[value="+a[o]+"]")[0].outerHTML;else a&&(selected_opts+=l.find("option[value="+a+"]")[0].outerHTML);$.ajax({url:l.data("chosen-remote-url"),dataType:"json",data:{q:t,selected:a},type:"GET"}).done((function(e){for(var t="",o=0;o<e.length;o++)t+="<option value='"+e[o].value+"'>"+e[o].label+"</option>";selected_opts&&(t+=selected_opts),l.html(t).val(a).trigger("chosen:updated")}))}),250);$(document).on("input",".chosen-container input.chosen-search-input",debouncedCallback);

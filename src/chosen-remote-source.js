@@ -1,7 +1,7 @@
 /*
- * chosen-ajax-options
+ * chosen-remote-source
  * @version v0.9.0
- * @link http://github.com/westonganger/chosen-ajax-options
+ * @link http://github.com/westonganger/chosen-remote-source
  * @license MIT
  */
 
@@ -26,7 +26,7 @@ chosen_prototype.show_search_field_default = function() {
 
 var default_delay = 250;
 
-window.ChosenAjaxOptions.delay = default_delay;
+window.ChosenRemoteSource.delay = default_delay;
 
 // ADD DEBOUNCE METHOD
 var debounce = function(func){
@@ -42,7 +42,7 @@ var debounce = function(func){
 
     clearTimeout(timeout);
 
-    timeout = setTimeout(later, (ChosenAjaxOptions.delay || default_delay));
+    timeout = setTimeout(later, (ChosenRemoteSource.delay || default_delay));
   };
 };
 

@@ -1,0 +1,7 @@
+/*
+ * chosen-remote-source
+ * @version v0.9.0
+ * @link http://github.com/westonganger/chosen-remote-source
+ * @license MIT
+ */
+var el=$("<select></select>");el.chosen();var chosen_prototype=Object.getPrototypeOf(el.data("chosen"));chosen_prototype.show_search_field_default=function(){return this.is_multiple&&this.choices_count()<1&&!this.active_field?(this.search_field.val(this.default_text),this.search_field.addClass("default")):(this.default_text===this.search_field.val()&&this.search_field.val(""),this.search_field.removeClass("default"))};var default_delay=250;window.ChosenRemoteSource.delay=default_delay;var debounce=function(e){var t;return function(){var a=this,l=arguments,o=function(){t=null,e.apply(a,l)};clearTimeout(t),t=setTimeout(o,ChosenRemoteSource.delay||default_delay)}},debouncedCallback=debounce((function(){var e=$(this),t=e.val(),a=e.closest(".chosen-container").prev("select"),l=a.val();if(a[0].hasAttribute("multiple"))for(var o=0;o<l.length;o++)selected_opts+=a.find("option[value="+l[o]+"]")[0].outerHTML;else l&&(selected_opts+=a.find("option[value="+l+"]")[0].outerHTML);$.ajax({url:a.data("chosen-remote-url"),dataType:"json",data:{q:t,selected:l},type:"GET"}).done((function(e){for(var t="",o=0;o<e.length;o++)t+="<option value='"+e[o].value+"'>"+e[o].label+"</option>";selected_opts&&(t+=selected_opts),a.html(t).val(l).trigger("chosen:updated")}))}));$(document).on("input",".chosen-container input.chosen-search-input",debouncedCallback);
