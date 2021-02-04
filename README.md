@@ -17,9 +17,15 @@ npm install chosen-remote-source
 
 # Usage
 ```javascript
-<select data-chosen-remote-url="/path/to/url.json">
-  <option></option>
-</select>
+$('.chosen-remote-source').chosenRemoteSource({
+  url: "/my-path",
+  delay: 250,
+  event: 'input',
+  label_field: 'label',
+  value_field: 'value',
+  search_param: 'q', // TODO
+  selected_param: 'selected', // TODO
+});
 ```
 
 Now upon entering text the remote URL will be used to create an AJAX query to update the select options.
@@ -45,12 +51,6 @@ The plugins expects that your URL will return an array of objects with the `valu
   
   /* ... */
 ]
-```
-
-The default delay is 250ms, you can change this by setting the `delay` option:
-
-```javascript
-ChosenAjaxOptions.delay = 250;
 ```
 
 # Credits
