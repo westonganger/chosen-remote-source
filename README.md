@@ -17,7 +17,7 @@ npm install chosen-remote-source
 
 # Usage
 ```javascript
-$('.chosen-remote-source').chosenRemoteSource({
+$('select.chosen-remote-source').chosenRemoteSource({
   url: "/my-path",
   delay: 250,
   event: 'input',

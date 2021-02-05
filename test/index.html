@@ -1,0 +1,127 @@
+<html>
+  <head>
+    <style>
+      .container{
+        width: 600px;
+        margin: 50px auto;
+      }
+
+      div{
+        margin-bottom: 10px;
+      }
+    </style>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
+    <script src="../dist/chosen-remote-source.js" ></script>
+
+    <script>
+      $(function(){
+        // TEST MOCKING - NOT WORKING
+
+        // Mock Ajax Responses
+        var ajax_response = function(response, error) {
+          return function (params) {
+            if (error) {
+              params.error(response);
+            } else {
+              params.success(response);
+            }
+          };
+        }
+
+        var setNewResponseData = function(data){
+          if(!data){
+            var data = [];
+
+            for(var i=0; i < 10; i++){
+              data.push({
+                value: Math.random(100),
+                label: Math.random(100),
+              })
+            }
+          }
+
+          $.ajax = ajax_response(JSON.stringify(data));
+        };
+
+        setNewResponseData();
+      });
+    </script>
+
+    <script>
+      $(function(){
+        // SETUP
+        $('select.is-chosen').chosen({width: '100%'});
+
+        $('select.chosen-remote-source').chosen({width: '100%'});
+
+        $('select').chosenRemoteSource({
+          url: "/my-path",
+        });
+
+        $('select.chosen-remote-source.minimal').chosenRemoteSource({
+          url: "/my-path",
+        });
+
+        $('select.chosen-remote-source.kitchen-sink').chosenRemoteSource({
+          url: "/my-path",
+          delay: 250,
+          event: 'input',
+          label_field: 'label',
+          value_field: 'value',
+          search_param: 'q', // TODO
+          selected_param: 'selected', // TODO
+        });
+      });
+    </script>
+
+    <script src="./vendor/jquery.assert.js"></script>
+
+    <script>
+      $(function(){
+        // TESTS HERE
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class='container'>
+      <div>
+        <strong>Plain Select</strong>
+        <select>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Normal Chosen Select</strong>
+        <select class='is-chosen'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Chosen Remote Source Select Minimal</strong>
+        <select class='chosen-remote-source minimal'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Chosen Remote Source Select Kitchen Sink</strong>
+        <select class='chosen-remote-source kitchen-sink'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+    </div>
+  </body>
+</html>

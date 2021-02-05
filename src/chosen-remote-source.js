@@ -73,10 +73,10 @@
 
     if(select[0].hasAttribute('multiple')){
       for(var i=0; i < selected.length; i++){
-        selected_opts += select.find("option[value="+selected[i]+"]")[0].outerHTML; 
+        selected_opts += select.find("option[value='"+selected[i]+"']")[0].outerHTML; 
       };
     }else if(selected){
-      selected_opts += select.find("option[value="+selected+"]")[0].outerHTML; 
+      selected_opts += select.find("option[value='"+selected+"']")[0].outerHTML; 
     }
 
     $.ajax({
@@ -109,16 +109,16 @@
 
     // OPTIONS HANDLING
     if(user_opts.event){
-      events = event.split(' ');
+      events_array = user_opts.event.split(' ');
 
       var events_str = '';
 
-      for(var i=0; i < events.length; i++){
+      for(var i=0; i < events_array.length; i++){
         if(i !== 0){
-          events += " ";
+          events_str += " ";
         }
 
-        events += (events[i] + event_namespace)
+        events_str += (events_array[i] + event_namespace)
       }
 
       user_opts.event = null;
@@ -134,9 +134,9 @@
 
     // BUILD AND ASSIGN OPTIONS TO DOM NODE
     var opts = {};
-    opts.url = user_opts.url || default_options.url;
-    opts.label_field = user_opts.label_field || default_options.label_field;
-    opts.value_field = user_opts.value_field || default_options.value_field;
+    opts.url = user_opts.url || defaults.url;
+    opts.label_field = user_opts.label_field || defaults.label_field;
+    opts.value_field = user_opts.value_field || defaults.value_field;
 
     elements.data('chosen-remote-source-opts', opts);
 
