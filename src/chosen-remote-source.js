@@ -12,10 +12,11 @@
   var defaults = {
     delay: 250,
     event: 'input',
+    method: 'GET',
     label_field: 'label',
     value_field: 'value',
-    search_param: 'q', // TODO
-    selected_param: 'selected', // TODO
+    search_param: 'q',
+    selected_param: 'selected',
   };
 
   // GET CHOSEN PROTOTYPE FOR PATCHING
@@ -65,9 +66,11 @@
 
     var search_text = chosen_search_input.val();
 
-    var select = chosen_search_input.closest(".chosen-container").prev("select");
+    var chosen_container = chosen_search_input.closest(".chosen-container");
 
-    var opts = select.data('chosen-remote-source-opts');
+    var opts = chosen_container.data('chosen-remote-source-opts');
+
+    var select = chosen_container.prev("select");
 
     var selected = select.val();
 
@@ -79,11 +82,15 @@
       selected_opts += select.find("option[value='"+selected+"']")[0].outerHTML; 
     }
 
+    var data = {};
+    data[opts.search_param] = search_text;
+    data[opts.selected_param] = selected;
+
     $.ajax({
       url: opts.url,
       dataType: 'json',
-      data: {q: search_text, selected: selected},
-      type: 'GET',
+      data: data,
+      type: opts.method,
     }).done(function(data){
       var opts = "";
 
@@ -126,27 +133,29 @@
       var events_str = 'input' + event_namespace;
     }
 
-    // TODO - THIS GETS SELECTS, WE NEED .chosen-container
-    var elements = this.filter(function(i, item){
-      return $(item).data('chosen');
+    // GET CHOSEN CONTAINER ELEMENTS
+    var chosen_elements = this.map(function(i, item){
+      return $(item).data('chosen').container;
     });
-
 
     // BUILD AND ASSIGN OPTIONS TO DOM NODE
     var opts = {};
     opts.url = user_opts.url || defaults.url;
+    opts.method = user_opts.method || defaults.method;
     opts.label_field = user_opts.label_field || defaults.label_field;
     opts.value_field = user_opts.value_field || defaults.value_field;
+    opts.search_param = user_opts.search_param || defaults.search_param;
+    opts.selected_param = user_opts.selected_param || defaults.selected_param;
 
-    elements.data('chosen-remote-source-opts', opts);
+    chosen_elements.data('chosen-remote-source-opts', opts);
 
     // CREATE DEBOUNCED CALLBACK
     var delay = user_opts.delay || defaults.delay;
     var debouncedCallback = debounce(delay, callback)
 
     // ASSIGN TO DOM EVENT
-    elements.off(event_namespace);
-    elements.on(events_str, 'input.chosen-search-input', debouncedCallback);
+    chosen_elements.off(event_namespace);
+    chosen_elements.on(events_str, 'input.chosen-search-input', debouncedCallback);
 
     return this;
   };

@@ -19,23 +19,25 @@ npm install chosen-remote-source
 ```javascript
 $('select.chosen-remote-source').chosenRemoteSource({
   url: "/my-path",
+  method: "GET",
   delay: 250,
   event: 'input',
   label_field: 'label',
   value_field: 'value',
-  search_param: 'q', // TODO
-  selected_param: 'selected', // TODO
+  search_param: 'q',
+  selected_param: 'selected',
 });
 ```
 
 Now upon entering text the remote URL will be used to create an AJAX query to update the select options.
 
-The ajax request will send the following parameters:
+The ajax request will send the following parameter names according to the specified `search_param` and `selected_param` options.
 
-- `q` - The search text
-- `selected` - The selected value(s)
+```
+{q: 'foo', selected: [1,6,8]}
+```
 
-The plugins expects that your URL will return an array of objects with the `value` and `label` attributes:
+The plugins expects that your URL will return an array of objects with attribute names according to the specified `value_field` and `label_field` options.
 
 ```
 [
@@ -52,6 +54,11 @@ The plugins expects that your URL will return an array of objects with the `valu
   /* ... */
 ]
 ```
+
+# TODO / Possible Future Enhancements
+
+- Could be worthwhile to make the selected options hidden
+
 
 # Credits
 

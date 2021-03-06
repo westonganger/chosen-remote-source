@@ -63,12 +63,13 @@
 
         $('select.chosen-remote-source.kitchen-sink').chosenRemoteSource({
           url: "/my-path",
+          method: 'GET',
           delay: 250,
           event: 'input',
           label_field: 'label',
           value_field: 'value',
-          search_param: 'q', // TODO
-          selected_param: 'selected', // TODO
+          search_param: 'q',
+          selected_param: 'selected',
         });
       });
     </script>
