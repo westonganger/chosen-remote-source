@@ -72,19 +72,29 @@
 
     var select = chosen_container.prev("select");
 
-    var selected = select.val();
+    var selected_values = select.val();
 
-    if(select[0].hasAttribute('multiple')){
-      for(var i=0; i < selected.length; i++){
-        selected_opts += select.find("option[value='"+selected[i]+"']")[0].outerHTML; 
-      };
-    }else if(selected){
-      selected_opts += select.find("option[value='"+selected+"']")[0].outerHTML; 
+    var selected_options_html = "";
+
+    if(typeof selected_values === "string"){
+      // SINGLE SELECT
+      selected_values = [selected_values];
     }
+
+    for(var i=0; i < selected_values.length; i++){
+      var el = select.find("option[value='"+selected_values[i]+"']")[0]; 
+
+      if(!el){
+        // OPTIONS WITHOUT VALUE ATTRIBUTE
+        el = select.find("option:not([value]):contains("+selected_values[i]+")")[0]; 
+      }
+
+      selected_options_html += el.outerHTML; 
+    };
 
     var data = {};
     data[opts.search_param] = search_text;
-    data[opts.selected_param] = selected;
+    data[opts.selected_param] = select.val();
 
     $.ajax({
       url: opts.url,
@@ -92,17 +102,17 @@
       data: data,
       type: opts.method,
     }).done(function(data){
-      var opts = "";
+      var options_html = "";
 
       for(var i=0; i < data.length; i++){
-        opts += "<option value='"+data[i][opts.value_field]+"'>" + data[i][opts.label_field] + "</option>";
+        options_html += "<option value='"+data[i][opts.value_field]+"'>" + data[i][opts.label_field] + "</option>";
       }
 
-      if(selected_opts){
-        opts += selected_opts;
+      if(selected_options_html){
+        options_html += selected_options_html;
       }
 
-      select.html(opts).val(selected).trigger('chosen:updated');
+      select.html(options_html).val(selected_values).trigger('chosen:updated');
     });
   };
 
@@ -134,8 +144,13 @@
     }
 
     // GET CHOSEN CONTAINER ELEMENTS
-    var chosen_elements = this.map(function(i, item){
-      return $(item).data('chosen').container;
+    var chosen_elements = [];
+
+    this.each(function(i, item){
+      var chosen_data = $(item).data('chosen');
+      if(chosen_data){
+        chosen_elements.push(chosen_data.container);
+      }
     });
 
     // BUILD AND ASSIGN OPTIONS TO DOM NODE
@@ -147,15 +162,16 @@
     opts.search_param = user_opts.search_param || defaults.search_param;
     opts.selected_param = user_opts.selected_param || defaults.selected_param;
 
-    chosen_elements.data('chosen-remote-source-opts', opts);
-
     // CREATE DEBOUNCED CALLBACK
     var delay = user_opts.delay || defaults.delay;
     var debouncedCallback = debounce(delay, callback)
 
-    // ASSIGN TO DOM EVENT
-    chosen_elements.off(event_namespace);
-    chosen_elements.on(events_str, 'input.chosen-search-input', debouncedCallback);
+    // ASSIGN TO DOM
+    for(var i=0; i < chosen_elements.length; i++){
+      chosen_elements[i].data('chosen-remote-source-opts', opts);
+      chosen_elements[i].off(event_namespace);
+      chosen_elements[i].on(events_str, 'input.chosen-search-input', debouncedCallback);
+    }
 
     return this;
   };

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      .container{
+        width: 600px;
+        margin: 50px auto;
+      }
+
+      div{
+        margin-bottom: 10px;
+      }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
+    <script src="/dist/chosen-remote-source.js" ></script>
+
+    <script>
+      $(function(){
+        // Mock Ajax Responses
+        var set_ajax_response = function(data){
+          $.ajax = $.Deferred().resolve(data).promise;
+        }
+
+        var setNewResponseData = function(data){
+          if(!data){
+            var data = [];
+
+            for(var i=0; i < 250; i++){
+              random = Math.random().toString(36).substring(7),
+
+              data.push({
+                value: random,
+                label: random,
+              })
+            }
+          }
+
+          set_ajax_response(data);
+        };
+
+        setNewResponseData();
+
+        // CHANGE AJAX RESPONSE EVERY 5 SECONDS
+        setInterval(function(){
+          setNewResponseData();
+          console.log("Generated new Mock AJAX response data");
+        }, 5000);
+
+        // SETUP INITIAL SELECT OPTIONS WHEN PAGE IS LOADED
+        var sample_options = []
+
+        for(var i=0; i < 250; i++){
+          random = Math.random().toString(36).substring(7),
+
+          sample_options.push("<option>"+random+"</option>");
+        }
+
+        sample_options = sample_options.join("")
+
+        $("select").html(sample_options);
+      });
+    </script>
+
+    <script>
+      $(function(){
+        // SETUP AND INITIALIZATION
+
+        $('select.is-chosen').chosen({
+          hide_results_on_select: false,
+          width: '100%',
+        });
+
+        $('select#chosen-remote-source-single').chosenRemoteSource({url: "/my-path"});
+
+        $('select#chosen-remote-source-multi').chosenRemoteSource({url: "/my-path"});
+
+        $('select#chosen-remote-source-kitchen-sink').chosenRemoteSource({
+          url: "/my-path",
+          method: 'GET',
+          delay: 250,
+          event: 'input',
+          label_field: 'label',
+          value_field: 'value',
+          search_param: 'q',
+          selected_param: 'selected',
+        });
+      });
+    </script>
+
+    <script>
+      $(function(){
+        // PUT AUTOMATED TESTS HERE
+
+        // TEST ON PLAIN SELECT, THAT IT DOESNT ERROR
+        $('select').chosenRemoteSource({url: "/my-path"});
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class='container'>
+      <div>
+        <strong>Plain Select</strong>
+        <select>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Normal Chosen Select</strong>
+        <select class='is-chosen'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Chosen Remote Source Select Minimal - Single Select</strong>
+        <select class='is-chosen' id='chosen-remote-source-single'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Chosen Remote Source Select Minimal- Multiple Select</strong>
+        <select multiple="true" class='is-chosen' id='chosen-remote-source-multi'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+
+      <div>
+        <strong>Chosen Remote Source Select Kitchen Sink - Single Select</strong>
+        <select class='is-chosen chosen' id='chosen-remote-source-kitchen-sink'>
+          <option></option>
+          <option>Foobar</option>
+        </select>
+      </div>
+    </div>
+  </body>
+</html>

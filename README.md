@@ -55,10 +55,9 @@ The plugins expects that your URL will return an array of objects with attribute
 ]
 ```
 
-# TODO / Possible Future Enhancements
+# Contributing
 
-- Could be worthwhile to make the selected options hidden
-
+Testing is handled within [`./index.html`](./index.html)
 
 # Credits
 
